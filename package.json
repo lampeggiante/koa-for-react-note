@@ -1,5 +1,5 @@
 {
-  "name": "koa-demo",
+  "name": "koa-for-react-note",
   "version": "1.0.0",
   "author": "LeonYu <1099052496@qq.com>",
   "license": "MIT",
@@ -11,8 +11,14 @@
   "dependencies": {
     "@babel/node": "^7.23.9",
     "koa": "^2.15.1",
-    "koa-bodyparser": "^4.4.1",
+    "koa-body": "^6.0.1",
+    "koa-bouncer": "^6.0.4",
+    "koa-log4": "^2.3.2",
+    "koa-logger": "^3.2.1",
+    "koa-onerror": "^4.2.0",
     "koa-router": "^12.0.1",
+    "koa-session": "^6.4.0",
+    "koa-static": "^5.0.0",
     "nodemon": "^3.1.0",
     "webpack-node-externals": "^3.0.0"
   },
