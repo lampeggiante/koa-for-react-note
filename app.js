@@ -6,21 +6,24 @@ import { koaBody } from "koa-body"
 import KoaBouncer from "koa-bouncer"
 import onError from "koa-onerror"
 import KoaSession from "koa-session"
+import cors from "@koa/cors"
 
 import config from "./config/index.js"
 import router from "./router/index.js"
 import { accessLogger, serverLogger, logger } from "./utils/logger.js"
 import { CustomException } from "./utils/exception.js"
 import { SESSION_CONFIG } from "./config/index.js"
+import db from "./core/db.js"
 
 const app = new Koa()
-
+db()
 app.keys = ["koa_for_react_blog"]
 
 app
   .use(KoaSession(SESSION_CONFIG, app))
   .use(accessLogger())
   .use(KoaLogger())
+  .use(cors())
   .use(
     koaBody({
       enableTypes: ["json", "form", "text", "xml"],
