@@ -1,17 +1,13 @@
 import Router from 'koa-router'
 
-const router = new Router()
+import notesRouter from './notes'
+import userRouter from './users'
 
-router.get('/test', async (ctx) => {
-  ctx.body = 'test success!'
+const router = new Router({
+  prefix: '/api'
 })
 
-router.get('/', async (ctx) => {
-  ctx.body = 'hello world'
-})
-
-router.post('/post_test', async (ctx) => {
-  ctx.body = ctx.request.body
-})
+router.use('/notes', notesRouter.routes(), notesRouter.allowedMethods())
+router.use('/users', userRouter.routes(), notesRouter.allowedMethods())
 
 export default router
