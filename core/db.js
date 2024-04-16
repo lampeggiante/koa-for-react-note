@@ -14,6 +14,7 @@ export default async () => {
     `CREATE TABLE IF NOT EXISTS users (
       user_id INT AUTO_INCREMENT PRIMARY KEY,
       username VARCHAR(20) NOT NULL UNIQUE,
+      latestNoteId BIGINT(20) UNIQUE,
       email VARCHAR(40),
       password VARCHAR(18) NOT NULL
     );`

@@ -7,6 +7,7 @@ import KoaBouncer from "koa-bouncer"
 import onError from "koa-onerror"
 import KoaSession from "koa-session"
 import cors from "@koa/cors"
+import jwt from "koa-jwt"
 
 import config from "./config/index.js"
 import router from "./router/index.js"
@@ -35,6 +36,26 @@ app
   .use(KoaBouncer.middleware()) // 加入 bouncer 可以支持校验表单
   .use(koaStatic(path.join(path.resolve(), config.staticPath)))
   .use(router.routes()) // 注册路由
+
+// 错误处理
+app.use(async (ctx, next) => {
+  return next().catch((err) => {
+    if (err.status === 401) {
+      ctx.status = 401
+      ctx.body = "Protected resource, use Authorization header to get access\n"
+    } else {
+      throw err
+    }
+  })
+})
+
+app.use(
+  jwt({
+    secret: "koa-for-react-note",
+  }).unless({
+    path: [/\/user\/login/],
+  }),
+)
 
 onError(app, {
   JSON: (err, ctx) => {

@@ -4,9 +4,9 @@ import { pool } from "../core/db"
 
 const notesRouter = new Router()
 
-notesRouter.post("/test", async (ctx) => {
+/* notesRouter.post("/test", async (ctx) => {
   ctx.body = ctx.request.body
-})
+}) */
 
 notesRouter.get("/get_all_notes", async (ctx) => {
   const [results, fields] = await pool.query("SELECT * FROM notes")
@@ -18,17 +18,40 @@ notesRouter.get("/get_all_notes", async (ctx) => {
   }
 })
 
+notesRouter.post("/get_note_by_id", async (ctx) => {
+  const { user_id } = ctx.request.body
+  console.log(user_id)
+  try {
+    const [results] = await pool.execute(
+      "SELECT * FROM notes WHERE user_id = ?",
+      [user_id]
+    )
+    console.log(results)
+    ctx.body = {
+      data: results,
+      code: 200,
+      message: "success",
+    }
+  } catch (err) {
+    ctx.status = 500;
+    ctx.body = 'Internal Server Error';
+    console.error(err)
+  }
+})
+
 notesRouter.post("/add_new_note", async (ctx) => {
-  const { noteId, noteTitle, noteContent, isStar, isTrash } = ctx.request.body
+  const { user_id, noteTitle, noteContent, isStar, isTrash } = ctx.request.body
 
   try {
     const [result] = await pool.execute(
-      "INSERT INTO notes (noteId, noteTitle, noteContent, isStar, isTrash) VALUES (?, ?, ?, ?, ?)",
-      [noteId, noteTitle, noteContent, isStar, isTrash],
+      "INSERT INTO notes (user_id, noteTitle, noteContent, isStar, isTrash) VALUES (?, ?, ?, ?, ?)",
+      [user_id, noteTitle, noteContent, isStar, isTrash],
     )
     console.log(result)
     ctx.body = {
+      data: result.insertId,
       message: "Note Created Successfully.",
+      code: 200,
     }
     ctx.status = 200
   } catch (err) {
